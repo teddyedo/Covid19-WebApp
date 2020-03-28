@@ -22,32 +22,49 @@
 <body class="bg-dark">
     <div class="container bg-dark text-white">
         <h1>Coronavirus Tracker</h1>
-        <p class="h3"><small>
+        <p class="h3">
+            <small>
                 This application lists the current number of cases reported across the
                 globe
             </small>
         </p>
-
-
-        <hr class="my-4 bg-light">
+        <hr class="my-4 bg-light" />
         <div class="jumbotron jumbotron-fluid row text-center bg-dark text-white">
             <div class="col">
-                <h1 class="display-3"><span class="badge bg-primary" th:text="${totalReportedCases}"></span></h1>
+                <h1 class="display-3">
+                    <span class="badge bg-primary" th:text="${totalReportedCases}"></span>
+                </h1>
                 <p class="lead mt-5">Total cases reported as of today</p>
             </div>
             <div class="col">
-                <h1 class="display-3"><span class="badge bg-info" th:text="${totalNewCases}"></span></h1>
+                <h1 class="display-3">
+                    <span class="badge bg-info" th:text="${totalNewCases}"></span>
+                </h1>
                 <p class="lead mt-5">New cases reported since previous day</p>
             </div>
             <div class="col">
-                <h1 class="display-3"><span class="badge bg-warning" th:text="${totalRecovered}"></span></h1>
+                <h1 class="display-3">
+                    <span class="badge bg-warning" th:text="${totalRecovered}"></span>
+                </h1>
                 <p class="lead mt-5">Total number of recovered</p>
             </div>
             <div class="col">
-                <h1 class="display-3"><span class="badge bg-danger" th:text="${totalDeaths}"></span></h1>
+                <h1 class="display-3">
+                    <span class="badge bg-danger" th:text="${totalDeaths}"></span>
+                </h1>
                 <p class="lead mt-5">Total number of deaths</p>
             </div>
         </div>
+        <p class="h3"><small>Filter by:</small></p>
+        <hr class="my-4 bg-light" />
+
+        <div class="row">
+            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">State</button>
+            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Total cases</button>
+            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Recovered</button>
+            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Deaths</button>
+        </div>
+
         <table class="table text-white text-center">
             <tr class="h4">
                 <th>State</th>
