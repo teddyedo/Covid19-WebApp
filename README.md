@@ -8,4 +8,5 @@ A simple java project, that take data with an HTTP request, format and show them
 
 ## Disclaimer 
 
-The project is just for fun, the data may be not exactly beacuse they are taken from a github repository, updated daily.
+The project is just for fun, the data may be not exactly beacuse they are taken from a github repository, updated daily:
+https://github.com/CSSEGISandData/COVID-19
