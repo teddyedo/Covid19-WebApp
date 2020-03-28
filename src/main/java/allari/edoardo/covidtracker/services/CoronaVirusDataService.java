@@ -27,10 +27,12 @@ import allari.edoardo.covidtracker.models.LocationStats;
  @Service
 public class CoronaVirusDataService {
 
-    private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+    private static String INFECTED_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 
     private static String DEATH_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
 
+    private static String RECOVERED_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
+    
     private List<LocationStats> allStats = new ArrayList<>();
 
     public List<LocationStats> getAllStats(){
@@ -45,34 +47,57 @@ public class CoronaVirusDataService {
 
         HttpClient client = HttpClient.newHttpClient();
         
-        //First request
-        HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(VIRUS_DATA_URL))
+        //Request for general data
+        HttpRequest genRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(INFECTED_URL))
                     .build();
 
-        //First response
-        HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        //Second request
-        HttpRequest request2 = HttpRequest.newBuilder()
+        //Request for deaths data
+        HttpRequest deathsRequest = HttpRequest.newBuilder()
                     .uri(URI.create(DEATH_URL))
                     .build();
 
-        //Second response
-        HttpResponse<String> httpResponse2 = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        //Request for recovered data
+        HttpRequest recoveredRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(RECOVERED_URL))
+                    .build();
+
+
+        //Response for general data
+        HttpResponse<String> genResponse = client.send(genRequest, HttpResponse.BodyHandlers.ofString());
+
+        //Response for deaths data
+        HttpResponse<String> deathsResponse = client.send(deathsRequest, HttpResponse.BodyHandlers.ofString());
         
-        StringReader csvBodyReader = new StringReader(httpResponse.body());
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+        //Response for recovered data
+        HttpResponse<String> recoveredResponse = client.send(recoveredRequest, HttpResponse.BodyHandlers.ofString());
+        
+        //Responses reader
+        StringReader genReader = new StringReader(genResponse.body());
+        Iterable<CSVRecord> genRecords = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(genReader);
 
-        StringReader csvBodyReader2 = new StringReader(httpResponse2.body());
-        Iterable<CSVRecord> deathRecords = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader2);
+        StringReader deathsReader = new StringReader(deathsResponse.body());
+        Iterable<CSVRecord> deathRecords = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(deathsReader);
 
-        for(CSVRecord record : records) {
+        StringReader recoveredReader = new StringReader(recoveredResponse.body());
+        Iterable<CSVRecord> recoveredRecords = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(recoveredReader);
+
+        List<CSVRecord> recoveredList = new ArrayList<>();
+
+        for (CSVRecord record : recoveredRecords){
+            recoveredList.add(record);
+        }
+
+        for(CSVRecord record : genRecords) {
+            
             LocationStats locationStat = new LocationStats();
+            
             locationStat.setState(record.get("Province/State"));
             locationStat.setCountry(record.get("Country/Region"));
+            
             int latestCases = Integer.parseInt(record.get(record.size() - 1));
             int prevDayCases = Integer.parseInt(record.get(record.size() - 2));
+            
             locationStat.setLatestTotalCases(latestCases);
             locationStat.setDifFromPrevDay(latestCases - prevDayCases);
 
@@ -80,13 +105,32 @@ public class CoronaVirusDataService {
             newStats.add(locationStat);
         }
 
+        //adding deaths information
         int count = 0;
         for(CSVRecord record : deathRecords){
             newStats.get(count).setDeaths(Integer.parseInt(record.get(record.size() - 1)));
             count ++;
         }
 
+
+        //adding recovered information
         
+        for(LocationStats locationStats : newStats){
+            for(CSVRecord record : recoveredList){
+                if((locationStats.getState().equals(record.get("Province/State"))) && locationStats.getCountry().equals(record.get("Country/Region"))){ 
+                    
+                    locationStats.setRecovered(Integer.parseInt(record.get(record.size() - 1)));
+                    break;
+                }
+                else if(record.get("Province/State").equals("") && locationStats.getCountry().equals(record.get("Country/Region"))){
+                    
+                    locationStats.setRecovered(Integer.parseInt(record.get(record.size() - 1)));
+                    break;
+                }
+            }
+        }
+
+
         newStats.sort(Comparator.comparing(LocationStats::getDeaths).reversed());
 
         this.allStats = newStats;

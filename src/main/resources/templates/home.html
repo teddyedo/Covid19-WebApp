@@ -19,7 +19,11 @@
         <hr class="my-4">
         <p>
             <span>New cases reported since previous day: </span>
-            <b><span th:text="${totalNewCases}"></span></b>
+            <b><span th:text="${totalNewCases}"></span></b><br>
+            <span>Total number of deaths: </span>
+            <b><span th:text="${totalDeaths}"></span></b><br>
+            <span>Total number of recovered: </span>
+            <b><span th:text="${totalRecovered}"></span></b>
         </p>
     </div>
 
@@ -31,14 +35,16 @@
             <th>Total cases reported</th>
             <th>Changes since last day</th>
             <th>Total deaths</th>
+            <th>Total Recovered</th>
 
         </tr>
         <tr th:each="locationStat : ${locationStats}">
-            <td th:text="${locationStat.state}">ciao</td>
+            <td th:text="${locationStat.state}"></td>
             <td th:text="${locationStat.country}"></td>
             <td th:text="${locationStat.latestTotalCases}">0</td>
             <td th:text="${locationStat.difFromPrevDay}">0</td>
             <td th:text="${locationStat.deaths}">0</td>
+            <td th:text="${locationStat.recovered}">1859184</td>
         </tr>
     </table>
     </div>

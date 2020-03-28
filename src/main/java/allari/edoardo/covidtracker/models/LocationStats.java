@@ -10,6 +10,9 @@ public class LocationStats {
     private int latestTotalCases;
     private int difFromPrevDay;
     private int deaths;
+    private int recovered;
+
+    
 
     public String getState() {
         return state;
@@ -38,11 +41,6 @@ public class LocationStats {
     public LocationStats() {
     }
 
-    @Override
-    public String toString() {
-        return "LocationStats [country=" + country + ", latestTotalCases=" + latestTotalCases + ", state=" + state
-                + "]";
-    }
 
     public int getDifFromPrevDay() {
         return difFromPrevDay;
@@ -60,6 +58,18 @@ public class LocationStats {
         this.deaths = deaths;
     }
 
-    
+    public int getRecovered() {
+        return recovered;
+    }
+
+    public void setRecovered(int recovered) {
+        this.recovered = recovered;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationStats [country=" + country + ", latestTotalCases=" + latestTotalCases + ", state=" + state
+                + "]";
+    }    
     
 }
