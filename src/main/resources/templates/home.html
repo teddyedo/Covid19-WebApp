@@ -17,6 +17,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
 <body class="bg-dark">
@@ -28,7 +29,7 @@
                 globe
             </small>
         </p>
-        <hr class="my-4 bg-light" />
+        <hr class="my-4 bg-light"/>
         <div class="jumbotron jumbotron-fluid row text-center bg-dark text-white">
             <div class="col">
                 <h1 class="display-3">
@@ -38,15 +39,9 @@
             </div>
             <div class="col">
                 <h1 class="display-3">
-                    <span class="badge bg-info" th:text="${totalNewCases}"></span>
+                    <span class="badge bg-warning" th:text="${totalNewCases}"></span>
                 </h1>
                 <p class="lead mt-5">New cases reported since previous day</p>
-            </div>
-            <div class="col">
-                <h1 class="display-3">
-                    <span class="badge bg-warning" th:text="${totalRecovered}"></span>
-                </h1>
-                <p class="lead mt-5">Total number of recovered</p>
             </div>
             <div class="col">
                 <h1 class="display-3">
@@ -54,15 +49,37 @@
                 </h1>
                 <p class="lead mt-5">Total number of deaths</p>
             </div>
+            <div class="col">
+                <h1 class="display-3">
+                    <span class="badge bg-success" th:text="${totalRecovered}"></span>
+                </h1>
+                <p class="lead mt-5">Total number of recovered</p>
+            </div>
         </div>
         <p class="h3"><small>Filter by:</small></p>
         <hr class="my-4 bg-light" />
 
-        <div class="row">
-            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">State</button>
-            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Total cases</button>
-            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Recovered</button>
-            <button type="button" class="col ml-5 mr-5 mb-4 btn btn-outline-primary">Deaths</button>
+        <div class="row text-center">
+            <form class="col" action="/sortBy/Country" method="GET">
+                <button type="submit" class="mb-4 pl-5 pr-5 btn btn-outline-primary text-white border border-light">
+                    Country
+                </button>
+            </form>
+            <form class="col" action="/sortBy/TotalCases" method="GET">
+                <button type="submit" class="mb-4 pl-5 pr-5 btn btn-outline-primary text-white border border-light">
+                    Total cases
+                </button>
+            </form>
+            <form class="col" action="/sortBy/Deaths" method="GET">
+                <button type="submit" class="mb-4 pl-5 pr-5 btn btn-outline-primary text-white border border-light">
+                    Deaths
+                </button>
+            </form>
+            <form class="col" action="/sortBy/Recovered" method="GET">
+                <button type="submit" class="mb-4 pl-5 pr-5 btn btn-outline-primary text-white border border-light">
+                    Recovered
+                </button>
+            </form>
         </div>
 
         <table class="table text-white text-center">
@@ -71,16 +88,16 @@
                 <th>Country</th>
                 <th>Total cases reported</th>
                 <th>Changes since last day</th>
-                <th>Total recovered</th>
                 <th>Total deaths</th>
+                <th>Total recovered</th>
             </tr>
             <tr class="h4" th:each="locationStat : ${locationStats}">
                 <td><small th:text="${locationStat.state}"></small></td>
                 <td><small th:text="${locationStat.country}"></small></td>
                 <td><small th:text="${locationStat.latestTotalCases}">0</small></td>
                 <td><small th:text="${locationStat.difFromPrevDay}">0</small></td>
-                <td><small th:text="${locationStat.recovered}">0</small></td>
                 <td><small th:text="${locationStat.deaths}"></small></td>
+                <td><small th:text="${locationStat.recovered}">0</small></td>
             </tr>
         </table>
     </div>

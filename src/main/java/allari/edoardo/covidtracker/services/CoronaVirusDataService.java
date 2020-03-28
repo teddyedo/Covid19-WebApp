@@ -7,7 +7,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -128,9 +127,6 @@ public class CoronaVirusDataService {
                 }
             }
         }
-
-
-        newStats.sort(Comparator.comparing(LocationStats::getDeaths).reversed());
 
         this.allStats = newStats;
 
