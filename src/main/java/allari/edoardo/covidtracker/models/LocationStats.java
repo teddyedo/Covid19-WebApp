@@ -1,5 +1,7 @@
 package allari.edoardo.covidtracker.models;
 
+import java.util.ArrayList;
+
 /**
  * LocationStats
  */
@@ -11,7 +13,9 @@ public class LocationStats {
     private int difFromPrevDay;
     private int deaths;
     private int recovered;
-
+    private ArrayList<Integer> casesDayByDay = new ArrayList<>();
+    private ArrayList<Integer> recoveredDayByDay = new ArrayList<>();
+    private ArrayList<Integer> deathsDayByDay = new ArrayList<>();
     
 
     public String getState() {
@@ -66,10 +70,34 @@ public class LocationStats {
         this.recovered = recovered;
     }
 
+    public ArrayList<Integer> getCasesDayByDay() {
+        return casesDayByDay;
+    }
+
+    public void setCasesDayByDay(ArrayList<Integer> casesDayByDay) {
+        this.casesDayByDay = casesDayByDay;
+    }
+
+    public ArrayList<Integer> getRecoveredDayByDay() {
+        return recoveredDayByDay;
+    }
+
+    public void setRecoveredDayByDay(ArrayList<Integer> recoveredDayByDay) {
+        this.recoveredDayByDay = recoveredDayByDay;
+    }
+
+    public ArrayList<Integer> getDeathsDayByDay() {
+        return deathsDayByDay;
+    }
+
+    public void setDeathsDayByDay(ArrayList<Integer> deathsDayByDay) {
+        this.deathsDayByDay = deathsDayByDay;
+    }
+
+       
     @Override
     public String toString() {
         return "LocationStats [country=" + country + ", latestTotalCases=" + latestTotalCases + ", state=" + state
                 + "]";
-    }    
-    
+    }
 }

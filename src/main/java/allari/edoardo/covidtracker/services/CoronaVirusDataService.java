@@ -99,6 +99,11 @@ public class CoronaVirusDataService {
             locationStat.setLatestTotalCases(latestCases);
             locationStat.setDifFromPrevDay(latestCases - prevDayCases);
 
+            //Save the number of infected day-by-day into a List
+            for (int i  = 4; i < record.size(); i ++){
+                locationStat.getCasesDayByDay().add(Integer.parseInt(record.get(i)));
+            }
+
             
             newStats.add(locationStat);
         }
@@ -107,6 +112,7 @@ public class CoronaVirusDataService {
         int count = 0;
         for(CSVRecord record : deathRecords){
             newStats.get(count).setDeaths(Integer.parseInt(record.get(record.size() - 1)));
+
             count ++;
         }
 

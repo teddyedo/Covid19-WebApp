@@ -3,6 +3,9 @@ package allari.edoardo.covidtracker.controllers;
 import java.util.Comparator;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +19,14 @@ import allari.edoardo.covidtracker.services.CoronaVirusDataService;
  * HomeController
  */
 
- @Controller
+@Controller
 public class HomeController {
-
 
     @Autowired
     CoronaVirusDataService coronaVirusDataService;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(Model model) throws JsonProcessingException {
 
 
         List<LocationStats> allStats = coronaVirusDataService.getAllStats();
@@ -36,6 +38,10 @@ public class HomeController {
         int totalDeaths = allStats.stream().mapToInt(stat -> stat.getDeaths()).sum();
         int totalRecovered = allStats.stream().mapToInt(stat -> stat.getRecovered()).sum();
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        model.addAttribute("JSONLocationStats", objectMapper.writeValueAsString(coronaVirusDataService.getAllStats()));
+        
+        
         model.addAttribute("locationStats", coronaVirusDataService.getAllStats());
         model.addAttribute("totalReportedCases", totalReportedCases);
         model.addAttribute("totalNewCases", totalNewCases);
